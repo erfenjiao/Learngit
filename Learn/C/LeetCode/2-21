@@ -1,0 +1,43 @@
+#include<stdio.h>
+#define MAXSIZE 10000;
+#define ERROR 0;
+#define OK 1;
+typedef int SElemType;
+typedef int Status;
+typedef struct 
+{
+    SElemType data[MAXSIZE];
+    int top1;
+    int top2;
+}sqDoubleStack;
+Status Push(sqDoubleStack *s,SElemType e,int stackNumber)
+{
+    if(s->top1+1==s->top2)
+    {
+        return ERROR;
+    }
+    if(stackNumber==1)//栈1有元素进栈
+    {
+        s->data[++s->top1]=e;
+    }
+    else if(stackNumber==2)//栈2有元素进栈
+    {
+        s->data[--s->top2]=e;
+    }
+    return OK;
+}
+//若栈不空，则删除栈顶元素，并用e返回其值
+Status Pop(sqDoubleStack *s,SElemType *e,int stackNumber)
+{
+    if(stackNumber==1)
+    {
+        if(s->top1==-1) return ERROR;
+        *e=s->data[s->top1--];
+    }
+    else if(stackNumber==2)
+    {
+        if(s->top2==-1) return ERROR;
+        *e=s->data[s->top2++];
+    }
+    return OK;
+}

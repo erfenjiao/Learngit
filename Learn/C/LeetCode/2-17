@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<string.h>
+int add(int a[],int len)//循环
+{
+    int x=0;
+    for(int i=0;i<len;i++)
+    {
+        x+=a[i];
+    }
+    return x;
+}
+/*
+*   1、a[begin]+（begin+1------end)
+*   2、(a[0]...end-1)+a[end]
+*   3、折半求和 mid = (begin+end)/2 [begin,mid)  (mid,end]
+*/
+int f(int a[],int begin,int len)//递归
+{
+    if(begin==len) return 0;
+    int x;
+    x=f(a,begin+1,len);
+    return x+a[begin];
+}
+int main()
+{
+    int a[]={2,5,3,9,12,7};
+    //int sum=add(a,len);
+    int length=sizeof(a)/sizeof(a[0]);
+    int sum=f(a,0,length);
+    printf("%d",sum);
+}

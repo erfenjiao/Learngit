@@ -1,0 +1,25 @@
+int cmp(void *a,void *b)
+{
+    int c=*(int*)a;
+    int d=*(int*)b;
+    return c-d;
+}
+int numRescueBoats(int* people, int peopleSize, int limit){
+    if(peopleSize<=0)
+    {
+        return 0;
+    }
+    int ans=0;
+    int i=0,j=peopleSize-1;
+    qsort(people,peopleSize,sizeof(people[0]),cmp);
+    while(i<=j)
+    {
+        if(people[i]+people[j]<=limit)
+        {
+            i++;
+        }
+        ans++;
+        j--;
+    }
+    return ans;
+}

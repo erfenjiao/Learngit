@@ -1,0 +1,34 @@
+#include<stdio.h>
+#include<string.h>
+int f(char data[],int k,int len)
+{
+    if(k==len)  
+    {
+        for(int i=0;i<len;i++)
+        {
+            printf("%c  ",data[i]);
+        }
+        printf("\n");
+    }
+    for(int i=k;i<len;i++)
+    {
+        {   char t=data[k];
+            data[k]=data[i];
+            data[i]=t;
+        }
+            f(data,k+1,len);
+        {
+            char t=data[k];
+            data[k]=data[i];
+            data[i]=t;
+        }
+    }   
+}
+int main()
+{
+    char data[]="ABCD";
+    int len=strlen(data);
+    //scanf("%d",&k);
+    f(data,0,len); 
+
+}

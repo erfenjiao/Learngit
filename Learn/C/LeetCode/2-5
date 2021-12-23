@@ -1,0 +1,12 @@
+
+#define max(a, b) (a) > (b) ? (a) : (b)
+int rob(int* nums, int numsSize){
+    int dp_1 = 0, dp_2 = 0;
+    int dp_i = 0;
+    for (int i = numsSize - 1; i >= 0; i--) {
+        dp_i = max(dp_1, nums[i] + dp_2);
+        dp_2 = dp_1;
+        dp_1 = dp_i;
+    }
+    return dp_i;
+}

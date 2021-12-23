@@ -1,0 +1,16 @@
+char * removeDuplicates(char * S){
+    int i,top=-1,bottom=-1;
+    for(i=0;i<strlen(S);i++)
+    {
+        if(top!=bottom && S[top]==S[i])
+        {
+            top--;
+            continue;
+        }
+        top++;
+        S[top]=S[i];
+    }
+    top++;
+    S[top]='\0';
+    return S;
+}

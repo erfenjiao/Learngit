@@ -1,0 +1,32 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ *在处理数组前，统计一遍信息（如频率、个数、第一次出现位置、最后一次出现位置等）可
+ *以使题目难度大幅降低。
+ 1.出现一次的忽略
+ 2.一个区间内要成双成对
+ 3.贪心思想：寻找每个片段可能的最小结束下标，因此可以保证每个片段的长度一定是符合要求的最短长度，如果取更短的片段，则一定会出现同一个字母出现在多个片段中的情况。由于每次取的片段都是符合要求的最短的片段，因此得到的片段数也是最多的。
+ 4.双指针
+ */
+
+int* partitionLabels(char * S, int* returnSize){
+    int last[26];
+    int len=strlen(S);
+    for(int i=0;i<len;i++)
+    {
+        last[S[i]-'a']=i;
+    }
+    int *partition=malloc(sizeof(int) * len);
+    int start=0,end=0;
+    *returnSize=0;
+    for(int i=0;i<len;i++)
+    {
+        end=fmax(end,last[S[i]-'a']);
+        if(end==i)
+        {
+            partition[(*returnSize)++]=end-start+1;
+            start=end+1;
+        }
+    }
+    return partition;
+}
+

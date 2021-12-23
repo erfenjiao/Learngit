@@ -1,0 +1,13 @@
+#include<stdio.h>
+#include<string.h>
+int f(char s[],int len)
+{
+    if(len<=1)  return s;
+    return f(s[1])+s[0];
+}
+int main()
+{
+    char s[]="abcd";
+    int len=strlen(s);
+    printf("%s",f(s,len));
+}
