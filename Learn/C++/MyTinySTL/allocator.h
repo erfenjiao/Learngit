@@ -38,7 +38,7 @@ namespace mystl
             static void destroy(T* ptr);
             static void destroy(T* first, T* last);
     };
-
+    //配置空间
     template<class T>
     T* allocator<T>::allocate()
     {
@@ -52,6 +52,7 @@ namespace mystl
         return static_cast<T*>(::operator new(n * sizeof(T)));
     }
 
+    //归还先前配置的空间
     template<class T>
     void allocator<T>::deallocate(T* ptr)
     {
@@ -67,7 +68,44 @@ namespace mystl
         ::operator delete(ptr);
     }
     
+    //construct  等同于 new (const void *p) T(x)
+    template<class T>
+    void allocator<T>::construct(T* ptr)
+    {
+        mystl::construct(ptr);
+    }
 
-}
+    template<class T>
+    void allocator<T>::construct(T* ptr , const T& value)
+    {
+        mystl::construct(ptr , value);
+    }
+
+    template<class T>
+    void allocator<T>::construct(T* ptr , T&& value)
+    {
+        mystl::construct(ptr , mystl::move(value));
+    }
+
+    template<class T>
+    template<class ...Args>
+    void allocator<T>::construct(T* ptr , Args&& ...args)
+    {
+        mystl::construct(ptr , mystl::forward<Args>(args)...);
+    }
+
+    template<class T>
+    void allocator<T>::destroy(T* ptr)
+    {
+        mystl::destroy(ptr);
+    }
+    template <class T>
+    void allocator<T>::destroy(T* first, T* last)
+    {
+        mystl::destroy(first, last);
+    }
+
+
+};
 
 #endif
