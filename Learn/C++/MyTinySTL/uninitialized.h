@@ -106,6 +106,7 @@ namespace mystl
 
     /**
      * uninitialized_fill
+     * 在 [first, last) 区间内填充元素值
      * 也使我们能够将内存的配置与对象的构造行为分离开。如果 [first , last) 范围内的每一个迭代器都指向未初始化的内存
      * 那么　uninitialized_fill() 会在该范围内产生　ｘ　（第三个参数）的复制品，换句话说，uninitialized_fill()
      * 会针对操作范围内的每个迭代器 i ，调用 construct(&*i , x) , 在ｉ所指之处产生ｘ的复制品
@@ -117,6 +118,129 @@ namespace mystl
     {
         mystl(first , last , value);
     }
+
+    template<class ForwardIterator , class T>
+    void uninitialized_fill(ForwardIterator first , ForwardIterator last , const T&value ,
+     std::false_type)
+    {   
+        auto cur = first;
+        try
+        {
+            for(:cur != last ; cur++)
+            {
+                mystl::construct(&*cur , value);
+            }
+        }
+        catch(...)
+        {
+            for( ; cur!= last ; cur++)
+            {
+                mystl::destroy(&*first);
+            }
+        }
+    }
+
+    template<class ForwardIterator , class T>
+    void uninitialized_fill(ForwardIterator first , ForwardIterator last , const T&value)
+    {
+        mystl::uninitialized_fill(first , last , value , 
+                                    std::is_trivially_copy_assignable<
+                                    typename iterator_traits<ForwardIterator>>::value_type{});
+    }
+
+    /**
+     * uninitialized_fill_n
+     * 从 first 位置开始，填充 n 个元素值，返回填充结束的位置
+     * 能够使我们将内存配置与对象构造行为分离开，他会未指定范围内的所有元素设定相同的初值
+     * 如果 [ first , first+n ) 范围内的每一个迭代器都指向未初始化的内存，那么uninitialized_fill_n()会调用
+     * copy construct , 在该范围内产生　ｘ　（第三个参数）的复制品，换句话说，uninitialized_fill_n()
+     * 会针对操作范围内的每个迭代器 i ，调用 construct(&*i , x) , 在ｉ所指之处产生ｘ的复制品
+     */
+    template<class ForwardIterator , class Size , class T>
+    ForwardIterator
+    uninitialized_fill_n(ForwardIterator first , Size n , const T& value , std::true_type)
+    {
+        return fill_n(first , n , value);
+    }
+
+    template<class ForwardIterator , class Size , class T>
+    ForwardIterator
+    uninitialized_fill_n(ForwardIterator first , Size n , const T& value , std::false_type)
+    {
+        auto cur;
+        try
+        {
+            for( ; n > 0 ; n-- , ++cur)
+            {
+                mystl::construct(&*cur , value);
+            }
+        }
+        catch(...)
+        {
+            for( ; n > 0 ; n-- , ++cur)
+            {
+                mystl::destory(&*first);
+            }
+        }
+    }
+
+    template<class ForwardIterator , class Size , class T>
+    ForwardIterator
+    uninitialized_fill_n(ForwardIterator first , Size n , const T& value)
+    {
+        return mystl::unchecked_uninit_fill_n(first, n, value, 
+                                        std::is_trivially_copy_assignable<
+                                        typename iterator_traits<ForwardIter>::
+                                        value_type>{});
+        //交由高阶函数执行
+    }
+
+    /**
+     *  uninitialized_move
+     *  把[first, last)上的内容移动到以 result 为起始处的空间，返回移动结束的位置
+     */
+    template<class InputIterator , class ForwardIterator>
+    ForwardIterator
+    unchecked_uninit_move(InputIterator first , InputIterator last , ForwardIterator result , std::true_type) 
+    {
+        return mystl::move(first , last , result);
+    }
+
+    template<class InputIterator , class ForwardIterator>
+    ForwardIterator
+    unchecked_uninit_move(InputIterator first , InputIterator last , ForwardIterator result , std::false_type) 
+    {
+        ForwardIterator cur;
+        try
+        {
+            for( ; first != last ; first++ ,cur++)
+            {
+                mystl::construct(&*cur , mystl::move(*first));
+            }
+        }
+        catch(...)
+        {
+            mystl::destory(result , cur);
+        }
+        return cur;
+    }
+
+    template<class InputIterator , class ForwardIterator>
+    ForwardIterator
+    uninitialized_move(InputIterator first , InputIterator last , ForwardIterator result) 
+    {
+        return mystl::unchecked_uninit_move(first , last , result ,
+                                            std::is_trivially_move_assignable<
+                                            typename iterator_traits<InputIterator>::value_type>{});
+    }
+
+
+
+
+
+
+
+
     
 
 };
