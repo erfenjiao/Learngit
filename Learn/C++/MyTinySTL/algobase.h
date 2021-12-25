@@ -121,7 +121,23 @@ namespace mystl
      */
     template< class BidirectionalIter1 , class BidirectionalIter2>
     BidirectionalIter2  
+    unchecked_copy_backward_cat(BidirectionalIter1 first, BidirectionalIter1 last,
+                            BidirectionalIter2 result, mystl::bidirectional_iterator_tag)
+    {
+        while(first != last)
+            *--result = *-- first;
+        return result;
+    }
 
+    template< class BidirectionalIter1 , class BidirectionalIter2>
+    BidirectionalIter2  
+    unchecked_copy_backward_cat(BidirectionalIter1 first, BidirectionalIter1 last,
+                            BidirectionalIter2 result, mystl::bidirectional_iterator_tag)
+    {
+        while(first != last)
+            *--result = *-- first;
+        return result;
+    }
 
 }; // namespace mystl
 
