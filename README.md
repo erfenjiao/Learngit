@@ -8,4 +8,4 @@
 －－Ｃ＋＋
 －－Ｇｏ
 －－MarkDown
-token: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
+token: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
