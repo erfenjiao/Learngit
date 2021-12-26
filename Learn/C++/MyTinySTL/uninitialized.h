@@ -231,18 +231,49 @@ namespace mystl
     {
         return mystl::unchecked_uninit_move(first , last , result ,
                                             std::is_trivially_move_assignable<
-                                            typename iterator_traits<InputIterator>::value_type>{});
+                                            typename iterator_traits<InputIterator>::value_type>{});                        
     }
 
+    /**
+     *  uninitialized_move_n
+     *  把[first, first + n)上的内容移动到以 result 为起始处的空间，返回移动结束的位置
+     */
+    template <class InputIter, class Size, class ForwardIter>
+    ForwardIter 
+    unchecked_uninit_move_n(InputIter first, Size n, ForwardIter result, std::true_type)
+    {
+        return mystl::move(first, first + n, result);
+    }
 
+    template <class InputIter, class Size, class ForwardIter>
+    ForwardIter
+    unchecked_uninit_move_n(InputIter first, Size n, ForwardIter result, std::false_type)
+    {
+        auto cur = result;
+        try
+        {
+            for (; n > 0; --n, ++first, ++cur)
+            {
+                mystl::construct(&*cur, mystl::move(*first));
+            }
+        }
+        catch (...)
+        {
+            for (; result != cur; ++result)
+                mystl::destroy(&*result);
+            throw;
+        }
+        return cur;
+    }
 
-
-
-
-
-
-    
-
+    template <class InputIter, class Size, class ForwardIter>
+    ForwardIter uninitialized_move_n(InputIter first, Size n, ForwardIter result)
+    {
+    return mystl::unchecked_uninit_move_n(first, n, result,
+                                            std::is_trivially_move_assignable<
+                                            typename iterator_traits<InputIter>::
+                                            value_type>{});
+    }
 };
 
 #endif

@@ -1,7 +1,12 @@
 #ifndef ITERATOR_H_
 #define ITERATOR_H_
 
-// 这个头文件用于迭代器设计，包含了一些模板结构体与全局函数，
+/**
+ * 这个头文件用于迭代器设计，包含了一些模板结构体与全局函数
+ * iterator 提供一种方法，使之能够依序寻访某个聚合物（容器）所含的各个元素，而又无需暴露
+ * 该聚合物内部的表达式 
+ */
+
 #include"type_traits.h"
 #include<cstddef>
 
