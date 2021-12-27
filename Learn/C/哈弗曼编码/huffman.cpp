@@ -19,8 +19,10 @@ typedef struct symCode
   char code[MAX];
 }symCode;
 
-char ext[]=".hzip";
-char dext[]=".txt";
+// char ext[]=".hzip";
+// char dext[]=".txt";
+char ext[]=".code";    //压缩
+char dext[]=".encode"; //解码
 
 typedef struct node
 {
@@ -70,6 +72,15 @@ int main(int argc , char ** argv)
 	{
 		printf("----------\n");
 		printf("Usage:\n %s <input-file-to-zip> <zipped-output-file>\n***Huffman File Encoder***\nAuthor: erfenjiao\n",argv[0]);
+		if(argc==2)
+		{
+			argv[2]=(char *)malloc(sizeof(char)*(strlen(argv[1])+strlen(ext)+1));
+			strcpy(argv[2],argv[1]);
+			strcat(argv[2],ext);
+			argc++;
+		}
+		else
+			return 0;
 	}
 	fp=fopen(argv[1],"rb");
 	if(fp==NULL)
@@ -88,8 +99,11 @@ int main(int argc , char ** argv)
 	printf("construct huaffmanTree\n");
 	makeTree();
 
-	printf("\nAssigning Codewords.\n");
-	genCode(ROOT,"\0");	//preorder traversal
+	// printf("----------\n");
+	// printf("\nAssigning Codewords.\n");
+	// genCode(ROOT,"\0");	//preorder traversal
+
+
 	
 }
 
@@ -97,21 +111,21 @@ int main(int argc , char ** argv)
 void addSymbol(char c)
 {
 	node *p , *q , *m;
-	if(HEAD == NULL)
+	if(HEAD == NULL)      //link is null , newNode.
 	{
 		HEAD = newNode(c);
 		return ;
 	}
 	p = HEAD;
 	q = NULL;
-	if(p->x == c)
+	if(p->x == c)           //find
 	{
-		p->freq++;
-		if(p->next == NULL)
+		p->freq++;          
+		if(p->next == NULL)  //p node is end code in this link
 		{
 			return ;
 		}
-		if(p->freq > p->next->freq)
+		if(p->freq > p->next->freq)  
 		{
 			HEAD = p->next;
 			p->next = NULL;
@@ -120,7 +134,7 @@ void addSymbol(char c)
 		return ;
 	}
 
-	while(p->next != NULL && p->x != c)
+	while(p->next != NULL && p->x != c)  //依次往后查找
 	{
 		q = p;
 		p = p->next;
@@ -139,7 +153,7 @@ void addSymbol(char c)
 			insert(p , HEAD);
 		}
 	}
-	else //没有找到
+	else          //not find
 	{
 		q = newNode(c);
 		q->next = HEAD;
@@ -172,27 +186,28 @@ void insert(node *p,node *m)
 
 void makeTree()
 {
+	printf("----------\n");
+	printf("makeTree() begin...\n");
 	node  *p,*q;
 	p = HEAD;
 	while(p != NULL)
 	{
 		q = newNode('@');
 		q->type = INTERNAL;	 //internal node
-		q->left = p;		//join left subtree/node
+		q->left = p;		
 		q->freq = p->freq;
-		if(p->next != NULL)  //right
+		printf("q->left ")
+		if(p->next != NULL)  
 		{
 			p = p->next;
-			q->right = p;	//join right subtree /node
+			q->right = p;	
 			q->freq += p->freq;
 		}
-		p = p->next;	//consider next node frm list
-		if(p == NULL)	//list ends
+		p = p->next;	
+		if(p == NULL)	
 			break;
-		//insert new subtree rooted at q into list starting from p
-		//if q smaller than p
 		if(q->freq <= p->freq)
-		{//place it before p
+		{
 			q->next = p;
 			p = q;
 		}
