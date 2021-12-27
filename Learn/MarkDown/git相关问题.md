@@ -13,3 +13,7 @@ uesr.email=630166475@qq.com
 user.name=erfenjiao
 user.email=630166475@qq.com
 root@erfenjiao-PC:/home/erfenjiao/Learngit/Learn# env|grep -i proxy
+
+
+git token:
+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
