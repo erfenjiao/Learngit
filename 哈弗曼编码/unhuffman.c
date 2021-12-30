@@ -13,7 +13,7 @@ int  fileError(FILE *fp);
 int main(int argc , char**argv)
 {
      FILE *fp,*outfile;
-    char buffer;
+    char buffer , passwd2 , buffer2;
     char *decoded;
     int i;
     if(argc<=2)
@@ -34,8 +34,25 @@ int main(int argc , char**argv)
         printf("[!]Input file cannot be opened.\n");
         return -1;
     }
-
+    printf("please input passwd:\n");
+    scanf("%s",buffer2);
     printf("[Reading File Header]\n");
+    if(fread(&passwd2 , sizeof(char)*4 , 1 , fp)==0) 
+        return (fileError(fp));
+    // if(strlen(passwd2) != 4)
+    // {
+    //     printf("[!]password' length false!\n");
+    //     close(fp);
+    //     return 0;
+    // }
+    // if(strcmp(passwd2,passwd) != 0)
+    // {
+    //     printf("[!]password is error!\nplease input again!\n");
+    //     close(fp);
+    //     return 0;
+    // }
+    printf("passwd = %c",passwd2);
+
     if(fread(&buffer , sizeof(unsigned char) , 1 , fp)==0) 
         return (fileError(fp));
     N = buffer;		//No. of structures(mapping table records) to read
@@ -73,7 +90,7 @@ int main(int argc , char**argv)
     printf("\n\n[Reading data]\nReplacing codewords with actual characters\n");
     while(fread(&buffer , sizeof(char) , 1 , fp) != 0)	//Read 1 byte at a time
     {
-        printf("buffer = %c\n" , buffer);
+        //printf("buffer = %c\n" , buffer);
         decoded = decodeBuffer(buffer);	//decoded is pointer to array of characters read from buffer byte
         i = 0;
         while(decoded[i++]!='\0')
@@ -103,14 +120,14 @@ char *decodeBuffer(char b)
     printf("\t\tdecodeBuffer():\n");
     int i=0,j=0,t;
     static int k;
-    static int buffer;	
+    static int buffer;	// buffer larger enough to hold two b's
     char *decoded = (char *)malloc(MAX*sizeof(char));
     t = (int)b;
-    printf("\t\tt = %s , k = %d\n" , int2string(t) , k);
+    //printf("\t\tt = %s , k = %d\n" , int2string(t) , k);
     t = t & 0x00FF;		//1111 1111 &  :保留某些值或取出某些值
-    printf("\t\tt = %s , k = %d\n",int2string(t),k);
-    t=t<<8-k;		        //shift bits keeping zeroes for old buffer 
-    printf("\t\tt = %s , k = %d\n",int2string(t),k);
+    //printf("\t\tt = %s , k = %d\n",int2string(t),k);
+    t=t<<8-k;		//shift bits keeping zeroes for old buffer 
+    //printf("\t\tt = %s , k = %d\n",int2string(t),k);
     buffer = buffer | t;	//joined b to buffer
     k = k + 8;			    //first useless bit index +8 , new byte added
     if(padding != 0)	    // on first call
@@ -119,7 +136,7 @@ char *decodeBuffer(char b)
         k = 8 - padding;	//k points to first useless bit index
         padding = 0;
     }
-    printf("\t\tbuffer = %s , k = %d\n",int2string(buffer),k);
+    //printf("\t\tbuffer = %s , k = %d\n",int2string(buffer),k);
     //loop to find matching codewords
 
     //printf("\t\t(char)b = %c \n" ,b);

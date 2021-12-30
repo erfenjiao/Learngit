@@ -11,6 +11,8 @@ typedef struct symCode
 char ext[]=".code";      //压缩
 char dext[]=".decode";   //解压
 
+char passwd[4];
+
 char *bitsInChar(char n)
 {
     int i,k,and,j;

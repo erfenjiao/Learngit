@@ -17,3 +17,4 @@ root@erfenjiao-PC:/home/erfenjiao/Learngit/Learn# env|grep -i proxy
 
 git token:
 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
+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

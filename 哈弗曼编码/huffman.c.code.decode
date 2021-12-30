@@ -1,15 +1,26 @@
 /**
- * 1.建立哈夫曼树：读入文件(*.souce)，统计文件中字符出现的频度，并以这些字符的频度作为权值，建立哈夫曼树。
- * 2.编码：利用已建立好的哈夫曼树，获得各个字符的哈夫曼编码，并对正文进行编码，然后输出编码结果，并存入文件(*.code)中。
- * 3.译码：利用已建立好的哈夫曼树将文件(*.code)中的代码进行译码，并输出译码结果，并存入文件(*.decode)中。
- * 4.利用位操作，实现文件的压缩与解压。(选)
+ * 1.建立哈夫  ep	de 2�(tii	i读�   >,o
+R d>�(*.souce)，统计断  d>�中�  e(optm{e�d
+-��  ;	,�	bse�府  )�e并以�8   
+�t  �  e(optm
+-��频府  s=��  U\s2d 值，建立哈�  p U*de 2�
+nh�
+ * 2.编码：利�  a  ��  e>�立�  \fe	,�  ��夫曼树，�  �  ;men �  " da\h>;ye;(optm
+-���   >pxt o dp	dd-��码，并对正文迾  � ]*�)s	sdil，焈  e0�输出编�   (mxpo ,rsm E��并存�   >,o
+R d>�(*.code)中。
+ * W  * t e�码：利甜  m,/( ;>�立好�<   n ��夫曼树�  t{
+o
+R d>�(*.code)中  ;	,v>) erf	sdil�#  e( ) ]* t e��   	ti-%并输出译码结�    E��幈  ey-g  ��文仈  ;-H;code)中。
+ * �  	 ;	 ��  y s=�  
+o*l作，�  �*\e;>,o
+R d>�的压   dou- (;�解  ea	�eu	  c (�8  
  * 
  */
 #include<stdio.h>
 #include<malloc.h>
 #include<string.h>
-#include"huffman.h"
-#define INTERNAL 1
+#  a#  �yhuffman.h"
+#define INTE�  f p-g 
 #define LEAF 0
 
 
@@ -65,7 +76,7 @@ int main(int argc , char ** argv)
 	if(argc <= 2)
 	{
 		printf("----------\n");
-		printf("Usage:\n %s <input-file-to-zip> <zipped-output-file>\n***Huffman File Encoder***\nAuthor: erfenjiao\n",argv[0]);
+		printf("Usage:\n %s <    	d:"ile-to-zip> <zipped-output-file>\n***Huffman File Encoder***\nAuthor: erfenjiao\n",argv[0]);
 		if(argc==2)
 		{
 			argv[2]=(char *)malloc(sizeof(char)*(strlen(argv[1])+strlen(ext)+1));
@@ -114,7 +125,8 @@ int main(int argc , char ** argv)
 		printf("\n[!]Output file cannot be opened.\n");
 		return -2;
 	}
-	//codefile(fp , fp2); 已废弃
+	//codefile(fp , fp2); �  
+废   )�
 	writeHeader(fp2);
 	printf("----------\n");
 	//printf("WriteCode() :\n");
@@ -123,11 +135,10 @@ int main(int argc , char ** argv)
 		//printf("\n%c replaced with ",ch);
 		writeCode(ch , fp2);	//write corresponding code into fp2
 	}
-	
 }//main 
 
-//统计，一条链表
-void addSymbol(char c)
+//统计，一条链  � 
+�  "oeC;)ts-"mbol(char c)
 {
 	node *p , *q , *m;
 	if(HEAD == NULL)      //link is null , newNode.
@@ -153,7 +164,8 @@ void addSymbol(char c)
 		return ;
 	}
 
-	while(p->next != NULL && p->x != c)  //依次往后查找
+	while(p->next != NULL && p->x != c)  //依次往�  
+ ea	�找
 	{
 		q = p;
 		p = p->next;
@@ -187,8 +199,10 @@ void addSymbol(char c)
 	}
 }
 
-//按频率在列表中插入p，从m开始向右
-//我们不能放置小于m的节点，因为我们没有ptr到m左边的节点
+//按�  2p	\	p在到  � 
+!>(;�插入  ;)�e从m开始  e0�右
+//我们七  ud �放�W \尃  ,w�  fe	,�	 
+li'-��，因为我们没有ptr到m左边的节点
 void insert(node *p,node *m)
 {
 	if(m->next==NULL)
@@ -224,7 +238,7 @@ void makeTree()
 		q->left = p;		
 		q->freq = p->freq;
 		m = p->freq;
-		// printf("\t\t第　%d 次:\n",i++);
+		// printf("\t\t�  e　%d 次:\n",i++);
 		// printf("\t\tq->left->freq = %d\tq->left->x = %c\n",q->freq , p->x); 
 		//printf("q->left :%d:\n",*p);
 		if(p->next != NULL)  
@@ -274,8 +288,7 @@ void genCode(node *p,char* code)
 
 		//assign code
 		p->code = code;	//assign code to current node
-		if(p->x != '@')
-			printf("\t\t[p->x = %c|p->freq = %d|p->code = %s|p->type = %d]\n",p->x,p->freq,p->code,p->type);
+		if(p->x != '@'  d			printf("\t\t[p->x = %c|p->freq = %d|p->code = %s|p->type = %d]\n",p->x,p->freq,p->code,p->type);
 		lcode=(char *)malloc(strlen(code)+2);
 		rcode=(char *)malloc(strlen(code)+2);
 		sprintf(lcode , "%s0" , code);
@@ -290,7 +303,7 @@ void writeCode(char ch , FILE *f) //fp2
 {
 	char *code;
 	code = getCode(ch);
-	//printf("\t\tWriteCode() :\n");
+	//printf("\t\tW "htqode() :\n");
 	//printf("\t\tcode = %s\n",code);
 	while(*code != '\0')
 	{
@@ -317,7 +330,7 @@ char *getCode(char ch)
 }
 
 void writeHeader(FILE *f)
-{//Table mapping 'codewords' to actual symbols
+{//Table mapping 'codewords'  oq\h=�   rymbols
 	// printf("\t\t----------\n");
 	// printf("\t\twriteHeader():\n");
 	symCode record;
@@ -327,15 +340,12 @@ void writeHeader(FILE *f)
 	while(p != NULL)	
 	{
 		temp += (strlen(p->code)) * (p->freq);		//temp stores padding
-		if(strlen(p->code) > MAX) 
-			printf("\n[!] Codewords are longer than usual.");	//TODO: Solve this case
-		temp %= 8;
-		i++;
+		if(strlen(p->code) > MA� g(		�)l*,y\n[!] Codewords are longer than usual.");	//TODO: Solve this case
+		temp %= 8  e		i++;
 		p = p->next;
 	}
 
-	if(i == 256)
-		N = 0;	//if 256 diff bit combinations exist, then alias 256 as 0
+	if(i == 25S  c		N = 0;	//if 256 diff bit combinations exist, then alias 2� \	g	Cp
 	else 
 		N = i;
 
@@ -348,13 +358,14 @@ void writeHeader(FILE *f)
 		record.x = p->x;
 		strcpy(record.code , p->code);
 		fwrite(&record , sizeof(symCode) , 1 , f);
-		//printf("\t\t[%c|%s]\n",record.x,record.code);
+		//printf("\t\t[%cS  -c*z -
+record.x,record.code);
 		p = p->next;
 	}
-	//discard 'padding' bits before data, while reading
-	padding = 8 - (char)temp;	//int to char & padding = 8-bitsExtra
+	//discard '   ti	, k e bits before data, while reading
+	padding = 8 - (char)temp;	//int to char & padding = 8   r\erExtra
 	fwrite(&padding , sizeof(char) , 1 , f);
-	printf("\t\tPadding = %d\n" , padding);
+	printf("\t\tW  ru\ g = %d\n" , padding);
 
 	for(i = 0 ; i < padding ; i++)   //补齐
 		writeBit(0 , f);
@@ -368,30 +379,30 @@ void writeBit(int b , FILE *f)
 	static char byte;
 	static int cnt;
 	char temp;
-	printf("\t\t------------------\t");
-	printf("\t\twriteBit():\t");
-	printf("\t\tSetting %dth bit = %d of %d \n" , cnt , b , byte);
+	//printf("\t\t------------------\t");
+	//printf("\t\twriteBit():\t");
+	//printf("\t\tS  ,){1%dth bit = %d of %d \n" , cnt , b , byte);
 	if(b == 1)
 	{	
 		temp = 1;
 		temp = temp << (7 - cnt);	
 		printf("\t\t----------if(b == 1)----------\n");
-		printf("\t\ttemp = %d , byte_1 = %d\n" , temp , byte);	
+		printf("\t\ttemp = %d , byte_1 = %d\n" , temp);	
 		byte = byte | temp;
-		printf("\t\tbyte_2 = %d\n" , byte);
-		//printf("\t\t----------------------\n");
+		printf("byte_2 = %c\t" , byte);
+		printf("\t\t----------------------\n");
 	}
 	cnt++;
-	//printf("\t\tbyte_3 = %d\n" , byte);
+	printf("\t\tbyteS  -n= %d\n" , byte);
 	//printf("\t\tbyte = %\n" , byte);
-	if(cnt == 8)		//buffer full
+	if(cnt == 8  		//buffer full
 	{
-		//printf("\t\tbyte = %d\n",byte);
+		
 		//printf("\t\tbitsChar = %s\n" ,bitsInChar(byte));
 		fwrite(&byte , sizeof(char) , 1 , f);
 		cnt = 0; 
 		byte = 0;				//reset buffer
-		return;				   
+		return;				// buffer written to file
 	}
 	return;
 }

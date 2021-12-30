@@ -76,6 +76,20 @@ int main(int argc , char ** argv)
 		else
 			return 0;
 	}
+	printf("请输入压缩密码（四位字母）:\n");
+    scanf("%s",passwd);
+	//printf("strlen(passwd) = %d\n",strlen(passwd));
+    //printf("%s",passwd);
+	// while(strlen(passwd) != 4)
+	// {
+	// 	printf("[!]please input password!\n");
+	// 	memset(passwd , 4 , '\0');
+	// 	scanf("%s",passwd);
+	// 	if(strlen(passwd) == 4)
+	// 	{
+	// 		break;
+	// 	}
+	// }
 	fp=fopen(argv[1],"rb");
 	if(fp==NULL)
 	{
@@ -320,6 +334,8 @@ void writeHeader(FILE *f)
 {//Table mapping 'codewords' to actual symbols
 	// printf("\t\t----------\n");
 	// printf("\t\twriteHeader():\n");
+	fwrite(&passwd , sizeof(char)*4 , 1 , f);
+	printf("%s",passwd);
 	symCode record;
 	node *p;
 	int temp = 0 , i = 0;
@@ -368,17 +384,17 @@ void writeBit(int b , FILE *f)
 	static char byte;
 	static int cnt;
 	char temp;
-	printf("\t\t------------------\t");
-	printf("\t\twriteBit():\t");
-	printf("\t\tSetting %dth bit = %d of %d \n" , cnt , b , byte);
+	//printf("\t\t------------------\t");
+	//printf("\t\twriteBit():\t");
+	//printf("\t\tSetting %dth bit = %d of %d \n" , cnt , b , byte);
 	if(b == 1)
 	{	
 		temp = 1;
 		temp = temp << (7 - cnt);	
-		printf("\t\t----------if(b == 1)----------\n");
-		printf("\t\ttemp = %d , byte_1 = %d\n" , temp , byte);	
+		//printf("\t\t----------if(b == 1)----------\n");
+		//printf("\t\ttemp = %d , byte_1 = %d\n" , temp , byte);	
 		byte = byte | temp;
-		printf("\t\tbyte_2 = %d\n" , byte);
+		//printf("\t\tbyte_2 = %d\n" , byte);
 		//printf("\t\t----------------------\n");
 	}
 	cnt++;
